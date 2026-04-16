@@ -13,3 +13,4 @@ spec:
     port: 3005
     targetPort: 3005
     nodePort: 30005
+    
