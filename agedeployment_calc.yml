@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: age-calc-deployment
+  labels:
+    app: age-calc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: age-calc
+  template:
+    metadata:
+      labels:
+        app: age-calc
+    spec:
+      containers:
+      - name: age-calc
+        image: ayeshactn/age-calc:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3005

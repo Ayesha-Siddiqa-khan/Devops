@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    :root {
+      --bg-start: #f9f7f1;
+      --bg-end: #dfe8d8;
+      --surface: #ffffff;
+      --text: #1d2a23;
+      --accent: #2b7a4b;
+      --accent-hover: #22603b;
+      --danger: #b4382d;
+      --muted: #5d6d63;
+      --shadow: 0 20px 60px rgba(26, 48, 36, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.65), transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(43, 122, 75, 0.17), transparent 40%),
+        linear-gradient(130deg, var(--bg-start), var(--bg-end));
+      padding: 20px;
+    }
+
+    .card {
+      width: min(94vw, 520px);
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(43, 122, 75, 0.1);
+      animation: rise 450ms ease;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      letter-spacing: 0.02em;
+    }
+
+    p.sub {
+      margin: 0 0 20px;
+      color: var(--muted);
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      border: 1px solid #c8d8cc;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 1rem;
+      color: var(--text);
+      background: #fdfefd;
+    }
+
+    button {
+      margin-top: 8px;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .error {
+      margin-top: 14px;
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .result {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #eff6f0;
+      border: 1px solid #cde2d2;
+    }
+
+    .result strong {
+      color: #18492e;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Age Calculator</h1>
+    <p class="sub">Enter your date of birth to calculate your exact age.</p>
+
+    <form method="post">
+      <label for="dob">Date of Birth</label>
+      <input id="dob" name="dob" type="date" value="{{ dob_value }}" required>
+      <button type="submit">Calculate Age</button>
+    </form>
+
+    {% if error_message %}
+      <div class="error">{{ error_message }}</div>
+    {% endif %}
+
+    {% if age_result %}
+      <div class="result">
+        <strong>Your age:</strong>
+        {{ age_result.years }} years,
+        {{ age_result.months }} months,
+        and {{ age_result.days }} days.
+      </div>
+    {% endif %}
+  </main>
+</body>
+</html>
