@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
         - name: frontend-service
-          image: ayeshactn/frontend:latest
-          imagePullPolicy: Always
+          image: ayeshactn/frontend:ui-v2
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           readinessProbe:

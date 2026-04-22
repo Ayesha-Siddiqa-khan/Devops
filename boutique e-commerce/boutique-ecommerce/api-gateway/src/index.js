@@ -17,7 +17,6 @@ const serviceUrls = {
 };
 
 app.use(cors());
-app.use(express.json());
 app.use(morgan("dev"));
 
 app.get("/health", (req, res) => {
@@ -29,7 +28,7 @@ app.use(
   createProxyMiddleware({
     target: serviceUrls.auth,
     changeOrigin: true,
-    pathRewrite: { "^/api/auth": "/auth" }
+    pathRewrite: (_, req) => req.originalUrl.replace(/^\/api\/auth/, "/auth")
   })
 );
 
@@ -38,7 +37,7 @@ app.use(
   createProxyMiddleware({
     target: serviceUrls.products,
     changeOrigin: true,
-    pathRewrite: { "^/api/products": "/products" }
+    pathRewrite: (_, req) => req.originalUrl.replace(/^\/api\/products/, "/products")
   })
 );
 
@@ -47,7 +46,7 @@ app.use(
   createProxyMiddleware({
     target: serviceUrls.cart,
     changeOrigin: true,
-    pathRewrite: { "^/api/cart": "/cart" }
+    pathRewrite: (_, req) => req.originalUrl.replace(/^\/api\/cart/, "/cart")
   })
 );
 
@@ -56,7 +55,7 @@ app.use(
   createProxyMiddleware({
     target: serviceUrls.orders,
     changeOrigin: true,
-    pathRewrite: { "^/api/orders": "/orders" }
+    pathRewrite: (_, req) => req.originalUrl.replace(/^\/api\/orders/, "/orders")
   })
 );
 
@@ -65,7 +64,7 @@ app.use(
   createProxyMiddleware({
     target: serviceUrls.users,
     changeOrigin: true,
-    pathRewrite: { "^/api/users": "/users" }
+    pathRewrite: (_, req) => req.originalUrl.replace(/^\/api\/users/, "/users")
   })
 );
 
@@ -74,7 +73,7 @@ app.use(
   createProxyMiddleware({
     target: serviceUrls.payments,
     changeOrigin: true,
-    pathRewrite: { "^/api/payments": "/payments" }
+    pathRewrite: (_, req) => req.originalUrl.replace(/^\/api\/payments/, "/payments")
   })
 );
 

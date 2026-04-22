@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
         - name: api-gateway-service
-          image: ayeshactn/api-gateway:latest
-          imagePullPolicy: Always
+          image: ayeshactn/api-gateway:routing-fix-v3
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4000
           env:

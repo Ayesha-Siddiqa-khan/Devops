@@ -49,11 +49,11 @@ function ProductDetailPage() {
   return (
     <section className="detail-card">
       <img src={product.image_url} alt={product.name} />
-      <div>
+      <div className="detail-content">
+        <p className="category-pill">{product.category}</p>
         <h2>{product.name}</h2>
-        <p className="muted">{product.category}</p>
         <p>{product.description}</p>
-        <h3>${Number(product.price).toFixed(2)}</h3>
+        <h3 className="detail-price">${Number(product.price).toFixed(2)}</h3>
         <button onClick={handleAdd}>Add To Cart</button>
         {message && <p className="success">{message}</p>}
         {error && <p className="error">{error}</p>}

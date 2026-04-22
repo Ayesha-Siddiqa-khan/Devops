@@ -68,7 +68,10 @@ function CheckoutPage() {
 
   return (
     <section>
-      <h2>Checkout</h2>
+      <div className="section-head">
+        <h2>Checkout</h2>
+        <p className="muted">Fill your shipping details and place your order securely.</p>
+      </div>
       {error && <p className="error">{error}</p>}
       {message && <p className="success">{message}</p>}
 
@@ -77,17 +80,23 @@ function CheckoutPage() {
           Shipping Address
           <input
             value={address.shippingAddress}
+            placeholder="Street address"
             onChange={(e) => setAddress({ ...address, shippingAddress: e.target.value })}
           />
         </label>
         <label>
           City
-          <input value={address.city} onChange={(e) => setAddress({ ...address, city: e.target.value })} />
+          <input
+            value={address.city}
+            placeholder="City"
+            onChange={(e) => setAddress({ ...address, city: e.target.value })}
+          />
         </label>
         <label>
           Country
           <input
             value={address.country}
+            placeholder="Country"
             onChange={(e) => setAddress({ ...address, country: e.target.value })}
           />
         </label>
@@ -95,24 +104,27 @@ function CheckoutPage() {
           Postal Code
           <input
             value={address.postalCode}
+            placeholder="Postal code"
             onChange={(e) => setAddress({ ...address, postalCode: e.target.value })}
           />
         </label>
       </div>
 
-      <h3>Order Summary</h3>
-      {cartItems.map((item) => (
-        <p key={item.id}>
-          {item.product_name} x {item.quantity} = ${
-            (Number(item.price) * Number(item.quantity)).toFixed(2)
-          }
-        </p>
-      ))}
-      <h3>Total: ${totalAmount.toFixed(2)}</h3>
+      <div className="summary-card">
+        <h3>Order Summary</h3>
+        {cartItems.map((item) => (
+          <p key={item.id}>
+            {item.product_name} x {item.quantity} = ${
+              (Number(item.price) * Number(item.quantity)).toFixed(2)
+            }
+          </p>
+        ))}
+        <h3>Total: ${totalAmount.toFixed(2)}</h3>
 
-      <button onClick={placeOrder} disabled={placingOrder}>
-        {placingOrder ? "Placing order..." : "Place Order"}
-      </button>
+        <button onClick={placeOrder} disabled={placingOrder}>
+          {placingOrder ? "Placing order..." : "Place Order"}
+        </button>
+      </div>
     </section>
   );
 }
