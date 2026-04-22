@@ -24,8 +24,8 @@ spec:
           command: ["sh", "-c", "until nc -z postgres-service 5432; do echo waiting for postgres; sleep 2; done"]
       containers:
         - name: product-service
-          image: ayeshactn/product-service:latest
-          imagePullPolicy: Always
+          image: ayeshactn/product-service:bracelet-v1
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4002
           env:
