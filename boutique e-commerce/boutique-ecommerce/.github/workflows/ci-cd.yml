@@ -5,10 +5,14 @@ on:
     branches:
       - main
 
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+
 jobs:
   build-and-push:
     name: Build and Push Images
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
@@ -17,37 +21,44 @@ jobs:
             context: ./frontend
             dockerfile: ./frontend/Dockerfile
             image: frontend-service
+
           - name: api-gateway
             context: ./api-gateway
             dockerfile: ./api-gateway/Dockerfile
             image: api-gateway
+
           - name: auth-service
             context: ./auth-service
             dockerfile: ./auth-service/Dockerfile
             image: auth-service
+
           - name: product-service
             context: ./product-service
             dockerfile: ./product-service/Dockerfile
             image: product-service
+
           - name: cart-service
             context: ./cart-service
             dockerfile: ./cart-service/Dockerfile
             image: cart-service
+
           - name: order-service
             context: ./order-service
             dockerfile: ./order-service/Dockerfile
             image: order-service
+
           - name: user-service
             context: ./user-service
             dockerfile: ./user-service/Dockerfile
             image: user-service
+
           - name: payment-service
             context: ./payment-service
             dockerfile: ./payment-service/Dockerfile
             image: payment-service
 
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
@@ -59,67 +70,43 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push ${{ matrix.service.name }}
+      - name: Build and Push
         uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.service.context }}
           file: ${{ matrix.service.dockerfile }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service.image }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service.image }}:${{ github.sha }}
+            ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service.image }}:latest
+            ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service.image }}:${{ github.sha }}
 
   deploy:
-    name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
+    name: Deploy to Kubernetes (Minikube)
+    runs-on: self-hosted
     needs: build-and-push
 
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set kubeconfig
+      - name: Check Kubernetes Cluster
+        run: kubectl get nodes
+
+      - name: Apply Kubernetes Manifests
+        run: kubectl apply -f k8s/
+
+      - name: Restart Deployments (Rolling Update)
         run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+          kubectl rollout restart deployment frontend-service -n boutique-app
+          kubectl rollout restart deployment api-gateway-service -n boutique-app
+          kubectl rollout restart deployment auth-service -n boutique-app
+          kubectl rollout restart deployment product-service -n boutique-app
+          kubectl rollout restart deployment cart-service -n boutique-app
+          kubectl rollout restart deployment order-service -n boutique-app
+          kubectl rollout restart deployment user-service -n boutique-app
+          kubectl rollout restart deployment payment-service -n boutique-app
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: v1.30.0
-
-      - name: Update image tags to commit SHA
-        run: |
-          sed -i "s|yourdockerhubusername/frontend-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend-service:${{ github.sha }}|g" k8s/deployments/frontend-deployment.yaml
-          sed -i "s|yourdockerhubusername/api-gateway:latest|${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:${{ github.sha }}|g" k8s/deployments/api-gateway-deployment.yaml
-          sed -i "s|yourdockerhubusername/auth-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/auth-service:${{ github.sha }}|g" k8s/deployments/auth-deployment.yaml
-          sed -i "s|yourdockerhubusername/product-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/product-service:${{ github.sha }}|g" k8s/deployments/product-deployment.yaml
-          sed -i "s|yourdockerhubusername/cart-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/cart-service:${{ github.sha }}|g" k8s/deployments/cart-deployment.yaml
-          sed -i "s|yourdockerhubusername/order-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/order-service:${{ github.sha }}|g" k8s/deployments/order-deployment.yaml
-          sed -i "s|yourdockerhubusername/user-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/user-service:${{ github.sha }}|g" k8s/deployments/user-deployment.yaml
-          sed -i "s|yourdockerhubusername/payment-service:latest|${{ secrets.DOCKERHUB_USERNAME }}/payment-service:${{ github.sha }}|g" k8s/deployments/payment-deployment.yaml
-
-      - name: Apply Kubernetes manifests
-        run: |
-          kubectl apply -f k8s/
-          kubectl apply -f k8s/configmaps/
-          kubectl apply -f k8s/secrets/
-          kubectl apply -f k8s/deployments/
-          kubectl apply -f k8s/services/
-          kubectl apply -f k8s/monitoring/
-
-      - name: Rollout status
-        run: |
-          kubectl rollout status deployment/frontend-service -n boutique-app
-          kubectl rollout status deployment/api-gateway-service -n boutique-app
-          kubectl rollout status deployment/auth-service -n boutique-app
-          kubectl rollout status deployment/product-service -n boutique-app
-          kubectl rollout status deployment/cart-service -n boutique-app
-          kubectl rollout status deployment/order-service -n boutique-app
-          kubectl rollout status deployment/user-service -n boutique-app
-          kubectl rollout status deployment/payment-service -n boutique-app
-
-      - name: Verify deployment
+      - name: Verify Deployment
         run: |
           kubectl get pods -n boutique-app
           kubectl get svc -n boutique-app
