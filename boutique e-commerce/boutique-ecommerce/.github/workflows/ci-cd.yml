@@ -3,7 +3,9 @@ name: Boutique E-Commerce CI/CD
 on:
   push:
     branches:
+      - master
       - main
+  workflow_dispatch:
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
