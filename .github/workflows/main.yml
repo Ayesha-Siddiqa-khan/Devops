@@ -10,7 +10,7 @@ env:
 
 jobs:
   build-and-push:
-    name: Build and Push Images
+    name: Build and Push Docker Images
     runs-on: ubuntu-latest
 
     strategy:
@@ -81,19 +81,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Check Runner
+      - name: Show Runner Name
         run: hostname
 
-      - name: Start Minikube
-        run: minikube start
+      - name: Check Minikube Context
+        run: kubectl config current-context
 
-      - name: Set Minikube Context
-        run: kubectl config use-context minikube
-
-      - name: Check Cluster
+      - name: Check Kubernetes Nodes
         run: kubectl get nodes
 
-      - name: Apply Kubernetes Files
+      - name: Apply Kubernetes Manifests
         run: kubectl apply -f k8s/
 
       - name: Restart Deployments
