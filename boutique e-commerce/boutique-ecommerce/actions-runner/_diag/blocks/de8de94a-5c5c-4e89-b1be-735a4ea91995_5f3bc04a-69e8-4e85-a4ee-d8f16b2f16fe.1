@@ -1,0 +1,50 @@
+﻿2026-04-23T12:33:03.1471961Z ##[group]Run actions/checkout@v4
+2026-04-23T12:33:03.1473406Z with:
+2026-04-23T12:33:03.1473803Z   repository: Ayesha-Siddiqa-khan/Devops
+2026-04-23T12:33:03.1475389Z   token: ***
+2026-04-23T12:33:03.1475708Z   ssh-strict: true
+2026-04-23T12:33:03.1478430Z   ssh-user: git
+2026-04-23T12:33:03.1489558Z   persist-credentials: true
+2026-04-23T12:33:03.1490020Z   clean: true
+2026-04-23T12:33:03.1490324Z   sparse-checkout-cone-mode: true
+2026-04-23T12:33:03.1490669Z   fetch-depth: 1
+2026-04-23T12:33:03.1490939Z   fetch-tags: false
+2026-04-23T12:33:03.1491219Z   show-progress: true
+2026-04-23T12:33:03.1491506Z   lfs: false
+2026-04-23T12:33:03.1491837Z   submodules: false
+2026-04-23T12:33:03.1492128Z   set-safe-directory: true
+2026-04-23T12:33:03.1493104Z env:
+2026-04-23T12:33:03.1493636Z   DOCKERHUB_USERNAME: ***
+2026-04-23T12:33:03.1494010Z   PROJECT_DIR: boutique e-commerce/boutique-ecommerce
+2026-04-23T12:33:03.1494391Z ##[endgroup]
+2026-04-23T12:33:03.7635156Z Syncing repository: Ayesha-Siddiqa-khan/Devops
+2026-04-23T12:33:03.7637178Z ##[group]Getting Git version info
+2026-04-23T12:33:03.7637956Z Working directory is 'F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\Devops\Devops'
+2026-04-23T12:33:03.8353545Z [command]"C:\Program Files\Git\cmd\git.exe" version
+2026-04-23T12:33:03.9448895Z git version 2.52.0.windows.1
+2026-04-23T12:33:04.0950558Z ##[endgroup]
+2026-04-23T12:33:04.0955122Z Copying 'C:\Users\Rising\.gitconfig' to 'F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\_temp\6defddb5-7818-4c5b-8381-a5a9dc357fac\.gitconfig'
+2026-04-23T12:33:04.0956716Z Temporarily overriding HOME='F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\_temp\6defddb5-7818-4c5b-8381-a5a9dc357fac' before making global git config changes
+2026-04-23T12:33:04.0957957Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-23T12:33:04.0960690Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory "F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\Devops\Devops"
+2026-04-23T12:33:04.1155091Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
+2026-04-23T12:33:04.1491496Z https://github.com/Ayesha-Siddiqa-khan/Devops
+2026-04-23T12:33:04.1583152Z ##[group]Removing previously created refs, to avoid conflicts
+2026-04-23T12:33:04.1603737Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
+2026-04-23T12:33:04.1996961Z refs/heads/master
+2026-04-23T12:33:04.2086334Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --detach
+2026-04-23T12:33:04.2841929Z HEAD is now at 200c325 1
+2026-04-23T12:33:04.4136010Z ##[endgroup]
+2026-04-23T12:33:04.4136468Z [command]"C:\Program Files\Git\cmd\git.exe" submodule status
+2026-04-23T12:33:05.3212045Z ##[error]fatal: no submodule mapping found in .gitmodules for path 'age-calc'
+2026-04-23T12:33:05.3285029Z Bad Submodules found, removing existing files
+2026-04-23T12:33:05.3285701Z ##[group]Cleaning the repository
+2026-04-23T12:33:05.3293252Z [command]"C:\Program Files\Git\cmd\git.exe" clean -ffdx
+2026-04-23T12:33:05.3737324Z [command]"C:\Program Files\Git\cmd\git.exe" reset --hard HEAD
+2026-04-23T12:33:05.4187034Z HEAD is now at 200c325 1
+2026-04-23T12:33:05.4248253Z ##[endgroup]
+2026-04-23T12:33:05.4258778Z ##[warning]Unable to clean or reset the repository. The repository will be recreated instead.
+2026-04-23T12:33:05.4272134Z Deleting the contents of 'F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\Devops\Devops'
+2026-04-23T12:33:05.6470355Z ##[group]Initializing the repository
+2026-04-23T12:33:05.6484373Z [command]"C:\Program Files\Git\cmd\git.exe" init "F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\Devops\Devops"
+2026-04-23T12:33:05.7053986Z Initialized empty Git repository in F:/devops practise/k8

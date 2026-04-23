@@ -1,0 +1,56 @@
+﻿2026-04-23T12:32:58.6183982Z Current runner version: '2.333.1'
+2026-04-23T12:32:58.6222490Z Runner name: 'DESKTOP-QLF23OC'
+2026-04-23T12:32:58.6224242Z Runner group name: 'Default'
+2026-04-23T12:32:58.6225590Z Machine name: 'DESKTOP-QLF23OC'
+2026-04-23T12:32:58.6229622Z ##[group]GITHUB_TOKEN Permissions
+2026-04-23T12:32:58.6233509Z Contents: read
+2026-04-23T12:32:58.6233944Z Metadata: read
+2026-04-23T12:32:58.6234305Z Packages: read
+2026-04-23T12:32:58.6234687Z ##[endgroup]
+2026-04-23T12:32:58.6238517Z Secret source: Actions
+2026-04-23T12:32:58.6239099Z Prepare workflow directory
+2026-04-23T12:32:58.8264644Z Prepare all required actions
+2026-04-23T12:32:58.8329540Z Getting action download info
+2026-04-23T12:32:59.8765201Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-04-23T12:33:02.7148669Z Complete job name: Deploy to Local Minikube
+2026-04-23T12:33:03.1472036Z ##[group]Run actions/checkout@v4
+2026-04-23T12:33:03.1473430Z with:
+2026-04-23T12:33:03.1473807Z   repository: Ayesha-Siddiqa-khan/Devops
+2026-04-23T12:33:03.1475411Z   token: ***
+2026-04-23T12:33:03.1475712Z   ssh-strict: true
+2026-04-23T12:33:03.1479389Z   ssh-user: git
+2026-04-23T12:33:03.1489608Z   persist-credentials: true
+2026-04-23T12:33:03.1490025Z   clean: true
+2026-04-23T12:33:03.1490329Z   sparse-checkout-cone-mode: true
+2026-04-23T12:33:03.1490673Z   fetch-depth: 1
+2026-04-23T12:33:03.1490948Z   fetch-tags: false
+2026-04-23T12:33:03.1491223Z   show-progress: true
+2026-04-23T12:33:03.1491516Z   lfs: false
+2026-04-23T12:33:03.1491841Z   submodules: false
+2026-04-23T12:33:03.1492132Z   set-safe-directory: true
+2026-04-23T12:33:03.1493119Z env:
+2026-04-23T12:33:03.1493644Z   DOCKERHUB_USERNAME: ***
+2026-04-23T12:33:03.1494014Z   PROJECT_DIR: boutique e-commerce/boutique-ecommerce
+2026-04-23T12:33:03.1494395Z ##[endgroup]
+2026-04-23T12:33:03.7635314Z Syncing repository: Ayesha-Siddiqa-khan/Devops
+2026-04-23T12:33:03.7637194Z ##[group]Getting Git version info
+2026-04-23T12:33:03.7637962Z Working directory is 'F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\Devops\Devops'
+2026-04-23T12:33:03.8353595Z [command]"C:\Program Files\Git\cmd\git.exe" version
+2026-04-23T12:33:03.9448949Z git version 2.52.0.windows.1
+2026-04-23T12:33:04.0950605Z ##[endgroup]
+2026-04-23T12:33:04.0955137Z Copying 'C:\Users\Rising\.gitconfig' to 'F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\_temp\6defddb5-7818-4c5b-8381-a5a9dc357fac\.gitconfig'
+2026-04-23T12:33:04.0956720Z Temporarily overriding HOME='F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\_temp\6defddb5-7818-4c5b-8381-a5a9dc357fac' before making global git config changes
+2026-04-23T12:33:04.0957961Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-23T12:33:04.0960749Z [command]"C:\Program Files\Git\cmd\git.exe" config --global --add safe.directory "F:\devops practise\k8s\boutique e-commerce\boutique-ecommerce\actions-runner\_work\Devops\Devops"
+2026-04-23T12:33:04.1155152Z [command]"C:\Program Files\Git\cmd\git.exe" config --local --get remote.origin.url
+2026-04-23T12:33:04.1491792Z https://github.com/Ayesha-Siddiqa-khan/Devops
+2026-04-23T12:33:04.1583211Z ##[group]Removing previously created refs, to avoid conflicts
+2026-04-23T12:33:04.1603798Z [command]"C:\Program Files\Git\cmd\git.exe" rev-parse --symbolic-full-name --verify --quiet HEAD
+2026-04-23T12:33:04.1997025Z refs/heads/master
+2026-04-23T12:33:04.2086378Z [command]"C:\Program Files\Git\cmd\git.exe" checkout --detach
+2026-04-23T12:33:04.2841989Z HEAD is now at 200c325 1
+2026-04-23T12:33:04.4136055Z ##[endgroup]
+2026-04-23T12:33:04.4136481Z [command]"C:\Program Files\Git\cmd\git.exe" submodule status
+2026-04-23T12:33:05.3212130Z ##[error]fatal: no submodule mapping found in .gitmodules for path 'age-calc'
+2026-04-23T12:33:05.3285104Z Bad Submodules found, removing existing files
+2026-04-23T12:33:05.3285705Z ##[
