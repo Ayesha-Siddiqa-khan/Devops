@@ -30,7 +30,7 @@ function HomePage() {
               Shop Now
             </Link>
             <Link to="/cart" className="ghost-btn">
-              View Cart
+              View Cart ahmad
             </Link>
           </div>
           <div className="hero-metrics">
