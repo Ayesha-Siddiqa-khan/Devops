@@ -3,13 +3,12 @@ name: Boutique E-Commerce CI/CD
 on:
   push:
     branches:
-      - master
       - main
+      - master
   workflow_dispatch:
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  PROJECT_DIR: boutique e-commerce/boutique-ecommerce
 
 jobs:
   build-and-push:
@@ -21,40 +20,43 @@ jobs:
       matrix:
         service:
           - image: frontend-service
-            context: ./boutique e-commerce/boutique-ecommerce/frontend
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/frontend/Dockerfile
+            context: ./frontend
+            dockerfile: ./frontend/Dockerfile
 
           - image: api-gateway
-            context: ./boutique e-commerce/boutique-ecommerce/api-gateway
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/api-gateway/Dockerfile
+            context: ./api-gateway
+            dockerfile: ./api-gateway/Dockerfile
 
           - image: auth-service
-            context: ./boutique e-commerce/boutique-ecommerce/auth-service
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/auth-service/Dockerfile
+            context: ./auth-service
+            dockerfile: ./auth-service/Dockerfile
 
           - image: product-service
-            context: ./boutique e-commerce/boutique-ecommerce/product-service
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/product-service/Dockerfile
+            context: ./product-service
+            dockerfile: ./product-service/Dockerfile
 
           - image: cart-service
-            context: ./boutique e-commerce/boutique-ecommerce/cart-service
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/cart-service/Dockerfile
+            context: ./cart-service
+            dockerfile: ./cart-service/Dockerfile
 
           - image: order-service
-            context: ./boutique e-commerce/boutique-ecommerce/order-service
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/order-service/Dockerfile
+            context: ./order-service
+            dockerfile: ./order-service/Dockerfile
 
           - image: user-service
-            context: ./boutique e-commerce/boutique-ecommerce/user-service
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/user-service/Dockerfile
+            context: ./user-service
+            dockerfile: ./user-service/Dockerfile
 
           - image: payment-service
-            context: ./boutique e-commerce/boutique-ecommerce/payment-service
-            dockerfile: ./boutique e-commerce/boutique-ecommerce/payment-service/Dockerfile
+            context: ./payment-service
+            dockerfile: ./payment-service/Dockerfile
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Code (SAFE MODE)
         uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -81,8 +83,15 @@ jobs:
     needs: build-and-push
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Code (CLEAN FIX)
         uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Clean Git State (IMPORTANT FIX)
+        run: |
+          git reset --hard
+          git clean -fd
 
       - name: Show Runner Name
         run: hostname
@@ -90,33 +99,17 @@ jobs:
       - name: Check Minikube Context
         run: kubectl config current-context
 
-      - name: Check Kubernetes Nodes
-        run: kubectl get nodes
-
       - name: Apply Kubernetes Manifests
-        run: kubectl apply -f "$env:PROJECT_DIR/k8s/"
+        run: kubectl apply -f k8s/
 
-      - name: Restart Deployments
+      - name: Force Restart Deployments
         run: |
-          kubectl rollout restart deployment frontend-service -n boutique-app
-          kubectl rollout restart deployment api-gateway-service -n boutique-app
-          kubectl rollout restart deployment auth-service -n boutique-app
-          kubectl rollout restart deployment product-service -n boutique-app
-          kubectl rollout restart deployment cart-service -n boutique-app
-          kubectl rollout restart deployment order-service -n boutique-app
-          kubectl rollout restart deployment user-service -n boutique-app
-          kubectl rollout restart deployment payment-service -n boutique-app
+          kubectl rollout restart deployment -n boutique-app
 
       - name: Wait for Rollout
         run: |
           kubectl rollout status deployment/frontend-service -n boutique-app
           kubectl rollout status deployment/api-gateway-service -n boutique-app
-          kubectl rollout status deployment/auth-service -n boutique-app
-          kubectl rollout status deployment/product-service -n boutique-app
-          kubectl rollout status deployment/cart-service -n boutique-app
-          kubectl rollout status deployment/order-service -n boutique-app
-          kubectl rollout status deployment/user-service -n boutique-app
-          kubectl rollout status deployment/payment-service -n boutique-app
 
       - name: Verify Pods
         run: kubectl get pods -n boutique-app
