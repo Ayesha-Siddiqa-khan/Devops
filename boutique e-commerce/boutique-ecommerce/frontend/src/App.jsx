@@ -11,7 +11,7 @@ function App() {
       <header className="topbar panel">
         <div className="brand-wrap">
           <p className="eyebrow">Modern handmade collections</p>
-          <h1>Velvet Boutique</h1>
+          <h1>ZeenKaar Boutique</h1>
           <p>Curated fashion and beauty essentials</p>
         </div>
         <nav className="topnav">
