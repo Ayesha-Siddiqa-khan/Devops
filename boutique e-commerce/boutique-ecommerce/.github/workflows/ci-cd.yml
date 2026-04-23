@@ -17,45 +17,37 @@ jobs:
       fail-fast: false
       matrix:
         service:
-          - name: frontend-service
+          - image: frontend-service
             context: ./frontend
             dockerfile: ./frontend/Dockerfile
-            image: frontend-service
 
-          - name: api-gateway
+          - image: api-gateway
             context: ./api-gateway
             dockerfile: ./api-gateway/Dockerfile
-            image: api-gateway
 
-          - name: auth-service
+          - image: auth-service
             context: ./auth-service
             dockerfile: ./auth-service/Dockerfile
-            image: auth-service
 
-          - name: product-service
+          - image: product-service
             context: ./product-service
             dockerfile: ./product-service/Dockerfile
-            image: product-service
 
-          - name: cart-service
+          - image: cart-service
             context: ./cart-service
             dockerfile: ./cart-service/Dockerfile
-            image: cart-service
 
-          - name: order-service
+          - image: order-service
             context: ./order-service
             dockerfile: ./order-service/Dockerfile
-            image: order-service
 
-          - name: user-service
+          - image: user-service
             context: ./user-service
             dockerfile: ./user-service/Dockerfile
-            image: user-service
 
-          - name: payment-service
+          - image: payment-service
             context: ./payment-service
             dockerfile: ./payment-service/Dockerfile
-            image: payment-service
 
     steps:
       - name: Checkout Code
@@ -70,7 +62,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push
+      - name: Build and Push Image
         uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.service.context }}
@@ -81,21 +73,30 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service.image }}:${{ github.sha }}
 
   deploy:
-    name: Deploy to Kubernetes (Minikube)
-    runs-on: self-hosted
+    name: Deploy to Local Minikube
+    runs-on: [self-hosted, Windows, X64]
     needs: build-and-push
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Check Kubernetes Cluster
+      - name: Check Runner
+        run: hostname
+
+      - name: Start Minikube
+        run: minikube start
+
+      - name: Set Minikube Context
+        run: kubectl config use-context minikube
+
+      - name: Check Cluster
         run: kubectl get nodes
 
-      - name: Apply Kubernetes Manifests
+      - name: Apply Kubernetes Files
         run: kubectl apply -f k8s/
 
-      - name: Restart Deployments (Rolling Update)
+      - name: Restart Deployments
         run: |
           kubectl rollout restart deployment frontend-service -n boutique-app
           kubectl rollout restart deployment api-gateway-service -n boutique-app
@@ -106,7 +107,19 @@ jobs:
           kubectl rollout restart deployment user-service -n boutique-app
           kubectl rollout restart deployment payment-service -n boutique-app
 
-      - name: Verify Deployment
+      - name: Wait for Rollout
         run: |
-          kubectl get pods -n boutique-app
-          kubectl get svc -n boutique-app
+          kubectl rollout status deployment/frontend-service -n boutique-app
+          kubectl rollout status deployment/api-gateway-service -n boutique-app
+          kubectl rollout status deployment/auth-service -n boutique-app
+          kubectl rollout status deployment/product-service -n boutique-app
+          kubectl rollout status deployment/cart-service -n boutique-app
+          kubectl rollout status deployment/order-service -n boutique-app
+          kubectl rollout status deployment/user-service -n boutique-app
+          kubectl rollout status deployment/payment-service -n boutique-app
+
+      - name: Verify Pods
+        run: kubectl get pods -n boutique-app
+
+      - name: Verify Services
+        run: kubectl get svc -n boutique-app
