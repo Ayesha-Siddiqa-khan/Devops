@@ -3,10 +3,13 @@ name: Boutique E-Commerce CI/CD
 on:
   push:
     branches:
+      - master
       - main
+  workflow_dispatch:
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  PROJECT_DIR: boutique e-commerce/boutique-ecommerce
 
 jobs:
   build-and-push:
@@ -18,36 +21,36 @@ jobs:
       matrix:
         service:
           - image: frontend-service
-            context: ./frontend
-            dockerfile: ./frontend/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/frontend
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/frontend/Dockerfile
 
           - image: api-gateway
-            context: ./api-gateway
-            dockerfile: ./api-gateway/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/api-gateway
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/api-gateway/Dockerfile
 
           - image: auth-service
-            context: ./auth-service
-            dockerfile: ./auth-service/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/auth-service
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/auth-service/Dockerfile
 
           - image: product-service
-            context: ./product-service
-            dockerfile: ./product-service/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/product-service
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/product-service/Dockerfile
 
           - image: cart-service
-            context: ./cart-service
-            dockerfile: ./cart-service/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/cart-service
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/cart-service/Dockerfile
 
           - image: order-service
-            context: ./order-service
-            dockerfile: ./order-service/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/order-service
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/order-service/Dockerfile
 
           - image: user-service
-            context: ./user-service
-            dockerfile: ./user-service/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/user-service
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/user-service/Dockerfile
 
           - image: payment-service
-            context: ./payment-service
-            dockerfile: ./payment-service/Dockerfile
+            context: ./boutique e-commerce/boutique-ecommerce/payment-service
+            dockerfile: ./boutique e-commerce/boutique-ecommerce/payment-service/Dockerfile
 
     steps:
       - name: Checkout Code
@@ -91,7 +94,7 @@ jobs:
         run: kubectl get nodes
 
       - name: Apply Kubernetes Manifests
-        run: kubectl apply -f k8s/
+        run: kubectl apply -f "$env:PROJECT_DIR/k8s/"
 
       - name: Restart Deployments
         run: |
